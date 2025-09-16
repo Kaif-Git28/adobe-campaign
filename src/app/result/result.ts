@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, AfterViewInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { Router } from '@angular/router';
 
@@ -9,7 +9,7 @@ import { Router } from '@angular/router';
   standalone: true,
   imports: [CommonModule],
 })
-export class Result implements OnInit {
+export class Result implements OnInit, AfterViewInit {
   // values coming from navigation state (Home component)
   totalScore: number = 0;
   maxScore: number = 42; // 7 questions * 6 points
@@ -42,8 +42,8 @@ export class Result implements OnInit {
 
     // status: treat Growth and Industry Leader as PASS; others as FAIL
     this.statusLabel =
-      this.stageLabel === 'Growth Stage' ||
-      this.stageLabel === 'Industry Leader Stage'
+      this.stageLabel === 'Orchestrator' ||
+      this.stageLabel === 'Experience Leader'
         ? 'PASS'
         : 'FAIL';
 
@@ -52,6 +52,22 @@ export class Result implements OnInit {
 
     // compute radial background (conic-gradient string)
     this.radialBackground = this.makeRadialBackground(this.percentage);
+  }
+
+  ngAfterViewInit(): void {
+    // Force scroll to top after view is initialized
+    setTimeout(() => {
+      window.scrollTo({ top: 0, left: 0, behavior: 'smooth' });
+    }, 0);
+  }
+
+  // Method to get dynamic CSS class based on stage
+  getTitleColorClass(): string {
+    return this.stageLabel === 'Platform Holder' ? 'at-risk' : '';
+  }
+
+  getStageLabelColorClass(): string {
+    return this.stageLabel === 'Platform Holder' ? 'at-risk' : '';
   }
 
   private mapStageLabel(score: number): string {
@@ -78,33 +94,33 @@ export class Result implements OnInit {
   }
 
   // Updated pills for Adobe assessment stages
-private buildPills(stage: string) {
-  if (stage === 'Platform Holder') {
-    this.pills = [
-      { text: 'Platform Setup', class: 'pill-ghost' },
-      { text: 'Underutilized', class: '' },
-      { text: 'Need Activation', class: '' }
-    ];
-  } else if (stage === 'Optimizer') {
-    this.pills = [
-      { text: 'Solid Foundation', class: 'pill-secondary' },
-      { text: 'Automation Gaps', class: '' },
-      { text: 'Alignment Needed', class: '' }
-    ];
-  } else if (stage === 'Orchestrator') {
-    this.pills = [
-      { text: 'Integrated Stack', class: 'pill-success' },
-      { text: 'Scale Focus', class: '' },
-      { text: 'Speed & Efficiency', class: '' }
-    ];
-  } else {
-    this.pills = [
-      { text: 'Experience Leader', class: 'pill-success' },
-      { text: 'Fast Iteration', class: '' },
-      { text: 'Smart Personalization', class: '' }
-    ];
+  private buildPills(stage: string) {
+    if (stage === 'Platform Holder') {
+      this.pills = [
+        { text: 'Platform Setup', class: 'pill-ghost' },
+        { text: 'Underutilized', class: '' },
+        { text: 'Need Activation', class: '' }
+      ];
+    } else if (stage === 'Optimizer') {
+      this.pills = [
+        { text: 'Solid Foundation', class: 'pill-secondary' },
+        { text: 'Automation Gaps', class: '' },
+        { text: 'Alignment Needed', class: '' }
+      ];
+    } else if (stage === 'Orchestrator') {
+      this.pills = [
+        { text: 'Integrated Stack', class: 'pill-success' },
+        { text: 'Scale Focus', class: '' },
+        { text: 'Speed & Efficiency', class: '' }
+      ];
+    } else {
+      this.pills = [
+        { text: 'Experience Leader', class: 'pill-success' },
+        { text: 'Fast Iteration', class: '' },
+        { text: 'Smart Personalization', class: '' }
+      ];
+    }
   }
-}
 
   // produces the conic-gradient background CSS for the given percent (0..100)
   private makeRadialBackground(percent: number): string {
@@ -112,10 +128,10 @@ private buildPills(stage: string) {
     const p = Math.max(0, Math.min(100, Math.round(percent)));
     const angle = (p / 100) * 360;
 
-    // Use green for non-At Risk stages, red for At Risk stage
+    // Use green for non-Platform Holder stages, red for Platform Holder stage
     const isAtRisk = this.stageLabel === 'Platform Holder';
-    const accent = isAtRisk ? '#d82828' : '#28a745'; // red for At Risk, green for others
-    const accentLight = isAtRisk ? '#ffd7d7' : '#d4edda'; // light red for At Risk, light green for others
+    const accent = isAtRisk ? '#d82828' : '#28a745'; // red for Platform Holder, green for others
+    const accentLight = isAtRisk ? '#ffd7d7' : '#d4edda'; // light red for Platform Holder, light green for others
 
     return `conic-gradient(${accent} 0deg, ${accent} ${angle}deg, ${accentLight} ${angle}deg, ${accentLight} 360deg)`;
   }

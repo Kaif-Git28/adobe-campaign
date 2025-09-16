@@ -27,13 +27,13 @@
         <!-- radial now uses a bound background computed in the component -->
         <div
           class="radial"
-          [ngClass]="{ 'at-risk': stageLabel === 'At Risk Stage' }"
+          [ngClass]="{ 'at-risk': stageLabel === 'Platform Holder' }"
           aria-hidden="true"
           [ngStyle]="{ background: radialBackground }"
           [attr.data-percent]="percentage"
         >
           <div class="radial-inner">
-            <div class="score-display">{{ percentage }}%</div>
+            <div class="score-display" >{{ percentage }}%</div>
           </div>
         </div>
 
@@ -52,9 +52,9 @@
       </div>
 
       <div class="card-body">
-        <h3 class="card-title">
-          SFDC Success Assessment
-          <span class="muted">{{ stageLabel }}</span>
+        <h3 class="card-title" [ngClass]="getStageLabelColorClass()">
+          ADOBE Success Assessment
+          <span class="muted" [ngClass]="getStageLabelColorClass()">{{ stageLabel }}</span>
         </h3>
         <p class="card-desc">{{ stageMessage }}</p>
 
@@ -72,7 +72,7 @@
 <section class="contact-cta" aria-labelledby="contactCtaTitle">
   <div class="contact-inner">
     <h3 id="contactCtaTitle" class="contact-title">
-      Get in Touch with our Experts
+      Our experts will get in touch with you!
     </h3>
     <p class="contact-desc">
       For optimization of your Salesforce, connect with our experts and discover
